@@ -4,7 +4,7 @@ from mongoengine import *
 
 class NewsMetaData(EmbeddedDocument):
     channel_id = StringField(min_length=1)
-    channel_name = StringField(required=True, min_length=1)
+    channel_name = StringField(min_length=1)
     author_id = StringField(min_length=1)
     author_name = StringField(min_length=1)
     uploaded_at = DateTimeField(required=True)

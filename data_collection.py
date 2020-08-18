@@ -1,5 +1,5 @@
 # dependency
-from datetime import datetime
+from datetime import datetime, date
 from dotenv import load_dotenv
 import os
 
@@ -18,4 +18,5 @@ NEWS_DB_NAME = os.getenv("NEWS_DB_NAME")
 # Calling kernels
 db = DB(HOST, PORT, NEWS_DB_NAME)
 test_collector = NewsCollector(db)
+test_collector.crawl(target_date=date(2020, 8, 17))
 test_collector.close_driver()

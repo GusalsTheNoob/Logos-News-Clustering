@@ -5,15 +5,13 @@ from mongoengine import *
 class NewsMetaData(EmbeddedDocument):
     channel_id = StringField(min_length=1)
     channel_name = StringField(min_length=1)
-    author_id = StringField(min_length=1)
-    author_name = StringField(min_length=1)
-    uploaded_at = DateTimeField(required=True)
+    author_ids = ListField(StringField(min_length=1))
+    author_names = ListField(StringField(min_length=1))
+    uploaded_at = DateTimeField()
 
 
 class NewsContent(EmbeddedDocument):
     title = StringField(required=True, min_length=1)
-    thumbnail_url = StringField(min_length=1)
-    description = StringField()
     content = StringField()
 
 

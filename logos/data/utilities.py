@@ -39,3 +39,9 @@ def ntimestamp_to_datetime(timestamp, time_standard):
         timedelta(days=unit_dict['일전'], hours=unit_dict['시간전'],
                   minutes=unit_dict['분전'], seconds=unit_dict['초전'])
     return result
+
+
+def convert_to_mobile(pc_url):
+    url_dict = {part[0]: part[1] for part in map(
+        lambda x: x.split("="), pc_url[pc_url.index("?")+1:].split("&"))}
+    return f"https://n.news.naver.com/mnews/article/{url_dict['oid']}/{url_dict['aid']}"

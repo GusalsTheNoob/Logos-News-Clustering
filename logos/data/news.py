@@ -90,8 +90,13 @@ class NewsCollector:
 
     def __parse_and_save_header(self, row_soup):
         news_url = trimNewsURL(row_soup.find('a')['href'])
+        news_title = row_soup.find("a").string.strip()
         ## duplicacy check ##
         if News.objects(news_url=news_url).count() > 0:
+            return None
+        #####################
+        ## language check ###
+        if not any(['가' <= char <= '힣' for char in news_title]):
             return None
         #####################
         news_doc = News(
@@ -99,7 +104,7 @@ class NewsCollector:
             news_url=news_url,
             metadata=NewsMetaData(),
             content=NewsContent(
-                title=row_soup.find("a").string.strip()
+                title=news_title
             )
         )
         news_doc.save()

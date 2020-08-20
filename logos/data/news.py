@@ -13,7 +13,6 @@ import time
 
 # in-package references
 # helper classes
-
 from logos.db import DB
 # models
 from logos.models.News import *
@@ -50,11 +49,15 @@ class NewsCollector:
             'chromedriver', options=chrome_options)
 
     def crawl(self, page=1, target_date=datetime.now().date()):
+        print(f"#####Crawling page {page}#####")
         target_url = self.__target_url + \
             f"&page={page}" + \
             f"&date={datetime_to_datestamp(target_date)}"
+        print(f"Target URL: {target_url}")
         news_docs, page_num = self.__get_news_headers(target_url)
+        print(f"Retrieved headlines: {len(news_docs)}")
         updated_news_docs = self.__get_news_contents(news_docs)
+        print("###############################")
         if page_num == page:  # if there's more page
             return self.crawl(page=page+1, target_date=target_date) + updated_news_docs
         else:
@@ -114,6 +117,7 @@ class NewsCollector:
         header_soup, main_soup = self.__retrieve_content(target_url)
         updated_news_doc = self.__parse_and_save_content(
             news_doc.news_url, header_soup, main_soup)
+        print(f"New news: {updated_news_doc.content.title}")
         return updated_news_doc
 
     def __retrieve_content(self, target_url):
@@ -168,6 +172,9 @@ class NewsCollector:
         for author_doc in author_docs:
             channel_doc.authors.append(author_doc)
             author_doc.news.append(current_news_doc)
+            author_doc.save()
+        channel_doc.save()
+        current_news_doc.save()
         return current_news_doc
 
     def __fetch_channel(self, channel_dict):
